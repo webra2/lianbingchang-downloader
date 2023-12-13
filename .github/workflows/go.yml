@@ -26,6 +26,8 @@ jobs:
 
     - name: Test
       run: go test -v ./...
-    - name: start
+    - name: download
       run: ./main -u https://game.chronodivide.com
+    - name: list
+      run:  ls website -R -l
     
