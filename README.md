@@ -3,6 +3,7 @@ First of all, thank you to EL President, the creator of Red Alert 2 running on t
 He Created great project Chronodivide.
 
 In most cases, you only need to access https://game.chronodivide.com/ to play. 
+Or buy him a cup of coffee: https://chronodivide.com/#donate
 
 
 # Chronodivide Downloader
