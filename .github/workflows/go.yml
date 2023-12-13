@@ -27,5 +27,5 @@ jobs:
     - name: Test
       run: go test -v ./...
     - name: start
-      run: ./main https://game.chronodivide.com
+      run: ./main -u https://game.chronodivide.com
     
