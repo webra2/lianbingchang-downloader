@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
 	"strings"
@@ -31,6 +32,14 @@ func (s *Scraper) removeQuery(link string) string {
 // isStart cheks if the site is the startsite
 func (s *Scraper) isStart(link string) bool {
 	return strings.Compare(link, s.Root) == 0
+}
+
+func (s *Scraper) getVersion(link string) string {
+	u, _ := url.Parse(link)
+	if u == nil {
+		return ""
+	}
+	return u.Query().Get("v")
 }
 
 // sanitizeURL sanitizes a URL
