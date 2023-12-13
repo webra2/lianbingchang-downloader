@@ -123,6 +123,8 @@ func main() {
 		UseQueries: *flags.UseQueries,
 	}
 
+	log.Println("\n Start download site...")
+
 	// Take the links from the startsite
 	s.TakeLinks(*flags.Domain, started, finished, scanning, newLinks, pages, attachments)
 	seen[*flags.Domain] = true
