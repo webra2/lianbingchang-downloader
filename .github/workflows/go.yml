@@ -26,9 +26,6 @@ jobs:
 
     - name: Test
       run: go test -v ./...
-  download:
-     runs-on: ubuntu-latest
-     steps:
-       - name: start
-         run: ./main
+    - name: start
+      run: ./main https://game.chronodivide.com
     
