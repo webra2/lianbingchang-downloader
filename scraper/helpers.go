@@ -43,9 +43,9 @@ func (s *Scraper) sanitizeURL(link string) string {
 
 	link = strings.TrimSpace(link)
 
-	if string(link[len(link)-1]) != "/" {
-		link = link + "/"
-	}
+	//if string(link[len(link)-1]) != "/" {
+	//	link = link + "/"
+	//}
 
 	tram := strings.Split(link, "#")[0]
 
