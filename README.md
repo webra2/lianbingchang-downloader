@@ -1,5 +1,12 @@
-# Go Download Web
-A simple command-line application to download an entire online website, including CSS, JSS, and other assets. 
+# Credit
+First of all, thank you to EL President, the creator of Red Alert 2 running on the webpage. 
+He Created great project Chronodivide.
+
+In most cases, you only need to access https://game.chronodivide.com/ to play. 
+
+
+# Chronodivide Downloader
+A simple command-line application to download chronodivide , including CSS, JSS, and other assets. 
 Coded with Go.
 
 ## Project status
