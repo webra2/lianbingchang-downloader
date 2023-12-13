@@ -89,6 +89,7 @@ func main() {
 	attachments := make(chan []string, 100000)     // Attachments
 	started := make(chan int, 100000)              // Crawls started
 	finished := make(chan int, 100000)             // Crawls finished
+	var version string
 
 	var indexed, forSitemap, files []string
 
@@ -126,7 +127,7 @@ func main() {
 	log.Println("\n Start download site...")
 
 	// Take the links from the startsite
-	s.TakeLinks(*flags.Domain, started, finished, scanning, newLinks, pages, attachments)
+	s.TakeLinks(*flags.Domain, started, finished, scanning, newLinks, pages, attachments, &version)
 	seen[*flags.Domain] = true
 
 	founded := false
@@ -136,7 +137,7 @@ func main() {
 			for _, link := range links {
 				if !seen[link.Href] {
 					seen[link.Href] = true
-					go s.TakeLinks(link.Href, started, finished, scanning, newLinks, pages, attachments)
+					go s.TakeLinks(link.Href, started, finished, scanning, newLinks, pages, attachments, &version)
 				}
 			}
 			founded = true
@@ -167,14 +168,14 @@ func main() {
 		}
 
 		// Break the for loop once all scans are finished
-		if founded && len(started) > 0 && len(scanning) == 0 && len(started) == len(finished) {
+		if founded && len(started) > 0 && len(scanning) == 0 && len(started) == len(finished) && len(attachments) == 0 && len(pages) == 0 && len(newLinks) == 0 {
 			break
 		}
 	}
 
-	log.Println("\nFinished scraping the site...")
+	log.Println("\nFinished scraping the site, version :", version)
 
-	log.Println("\nDownloading attachments...")
+	log.Println("\nDownloading attachments...", len(files))
 	for _, attachedFile := range files {
 		s.SaveAttachment(attachedFile)
 		if strings.Contains(attachedFile, ".css") {
