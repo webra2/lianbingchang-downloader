@@ -129,6 +129,7 @@ func main() {
 	s.TakeLinks(*flags.Domain, started, finished, scanning, newLinks, pages, attachments)
 	seen[*flags.Domain] = true
 
+	founded := false
 	for {
 		select {
 		case links := <-newLinks:
@@ -138,7 +139,9 @@ func main() {
 					go s.TakeLinks(link.Href, started, finished, scanning, newLinks, pages, attachments)
 				}
 			}
+			founded = true
 		case page := <-pages:
+			founded = true
 			if !s.IsURLInSlice(page.URL, indexed) {
 				indexed = append(indexed, page.URL)
 				go func() {
@@ -155,6 +158,7 @@ func main() {
 				}
 			}
 		case attachment := <-attachments:
+			founded = true
 			for _, link := range attachment {
 				if !s.IsURLInSlice(link, files) {
 					files = append(files, link)
@@ -163,7 +167,7 @@ func main() {
 		}
 
 		// Break the for loop once all scans are finished
-		if len(started) > 1 && len(scanning) == 0 && len(started) == len(finished) {
+		if founded && len(started) > 0 && len(scanning) == 0 && len(started) == len(finished) {
 			break
 		}
 	}
@@ -172,6 +176,7 @@ func main() {
 
 	log.Println("\nDownloading attachments...")
 	for _, attachedFile := range files {
+		s.SaveAttachment(attachedFile)
 		if strings.Contains(attachedFile, ".css") {
 			moreAttachments := s.GetInsideAttachments(attachedFile)
 			for _, link := range moreAttachments {
