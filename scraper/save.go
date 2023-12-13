@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	pathp "path"
 	"strings"
 
 	"github.com/antsanchez/go-download-web/commons"
@@ -27,8 +28,8 @@ func (s *Scraper) SaveAttachment(url string) (err error) {
 		}
 
 		path := s.getOnlyPath(filepath)
-		if !s.exists(s.Path + path) {
-			os.MkdirAll(s.Path+path, 0755) // first create directory
+		if !s.exists(pathp.Join(s.Path, path)) {
+			os.MkdirAll(pathp.Join(s.Path, path), 0755) // first create directory
 		}
 	}
 
@@ -38,7 +39,7 @@ func (s *Scraper) SaveAttachment(url string) (err error) {
 	}
 	defer resp.Body.Close()
 
-	f, err := os.Create(s.Path + filepath)
+	f, err := os.Create(pathp.Join(s.Path, filepath))
 	if err != nil {
 		return
 	}
@@ -59,21 +60,21 @@ func (s *Scraper) SaveHTML(url string, html string) (err error) {
 		if commons.IsFinal(filepath) {
 			// if the url is a final url in a folder, like example.com/path
 			// this will create the folder "path" and, inside, the index.html file
-			if !s.exists(s.Path + filepath) {
-				os.MkdirAll(s.Path+filepath, 0755) // first create directory
+			if !s.exists(pathp.Join(s.Path, filepath)) {
+				os.MkdirAll(pathp.Join(s.Path, filepath), 0755) // first create directory
 				filepath = filepath + "index.html"
 			}
 		} else {
 			// if the url is not a final url in a folder, like example.com/path/bum.html
 			// this will create the folder "path" and, inside, the bum.html file
 			path := s.getOnlyPath(filepath)
-			if !s.exists(s.Path + path) {
-				os.MkdirAll(s.Path+path, 0755) // first create directory
+			if !s.exists(pathp.Join(s.Path, path)) {
+				os.MkdirAll(pathp.Join(s.Path, path), 0755) // first create directory
 			}
 		}
 	}
 
-	f, err := os.Create(s.Path + filepath)
+	f, err := os.Create(pathp.Join(s.Path, filepath))
 	if err != nil {
 		return
 	}
