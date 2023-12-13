@@ -42,7 +42,7 @@ type Page struct {
 }
 
 // getLinks Get the links from a HTML site
-func (s *Scraper) getLinks(domain string) (page Page, attachments []string, err error) {
+func (s *Scraper) getLinks(domain string) (page Page, attachments []string, version string, err error) {
 	resp, err := http.Get(domain)
 	if err != nil {
 		return
@@ -118,6 +118,9 @@ func (s *Scraper) getLinks(domain string) (page Page, attachments []string, err 
 				if a.Key == "src" {
 					link, err := resp.Request.URL.Parse(a.Val)
 					if err == nil {
+						if strings.Contains(link.String(), "dist") {
+							version = s.getVersion(link.String())
+						}
 						foundLink := s.sanitizeURL(link.String())
 						if s.isValidAttachment(foundLink) {
 							attachments = append(attachments, foundLink)
@@ -197,6 +200,7 @@ func (s *Scraper) TakeLinks(
 	newLinks chan []Links,
 	pages chan Page,
 	attachments chan []string,
+	v *string,
 ) {
 	started <- 1
 	scanning <- 1
@@ -207,17 +211,19 @@ func (s *Scraper) TakeLinks(
 	}()
 
 	// Get links
-	page, attached, err := s.getLinks(toScan)
+	page, attached, version, err := s.getLinks(toScan)
 	if err != nil {
 		fmt.Println(err)
 		return
+	}
+	if version != "" {
+		*v = version
 	}
 
 	// Save Page
 	pages <- page
 
 	attachments <- attached
-
 	// Save links
 	newLinks <- page.Links
 }
