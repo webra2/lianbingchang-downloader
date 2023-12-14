@@ -230,7 +230,8 @@ func (s *Scraper) getOnlyPath(url string) (path string) {
 
 // GetPath returns only the path, without domain, from the given link
 func (s *Scraper) GetPath(link string) string {
-	return strings.Replace(link, s.Root, "", 1)
+	ret := strings.Replace(link, s.Root, "", 1)
+	return strings.Replace(ret, "https://gameres.chronodivide.com", "", 1)
 }
 
 // exists returns whether the given file or directory exists
