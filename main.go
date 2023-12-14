@@ -15,6 +15,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"github.com/antsanchez/go-download-web/dp"
 	"log"
 	"net/http"
 	"os"
@@ -71,6 +72,9 @@ func parseFlags() (flags Flags, err error) {
 }
 
 func main() {
+
+	scanUrls := dp.RecordNetwork()
+
 	flags, err := parseFlags()
 	if err != nil {
 		log.Fatal(err)
@@ -175,6 +179,7 @@ func main() {
 
 	log.Println("\nFinished scraping the site, version :", version)
 
+	files = append(files, scanUrls...)
 	log.Println("\nDownloading attachments...", len(files))
 	for _, attachedFile := range files {
 		s.SaveAttachment(attachedFile)
