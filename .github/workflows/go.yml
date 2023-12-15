@@ -33,6 +33,8 @@ jobs:
         repository: 'webra2/webra2.github.io'
         path: website
         token: ${{ secrets.API_TOKEN_GITHUB }}
+    - name: download-cd
+      run: ./main
     - name: push
       run: |
         cd website
@@ -42,7 +44,5 @@ jobs:
         echo 'version' >> readme.md
         git commit -a -m "Add changes"
         git push origin main
-    - name: download
-      run: ./main
 
     
