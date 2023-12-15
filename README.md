@@ -26,7 +26,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-## Web Downloader Author
+## Base On Web Downloader Author
 [Antonio Sánchez](https://asanchez.dev)
 
 ## License
