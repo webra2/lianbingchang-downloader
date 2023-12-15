@@ -47,7 +47,15 @@ func (s *Scraper) SaveAttachment(url string) (err error) {
 	}
 	defer f.Close()
 
-	_, err = io.Copy(f, resp.Body)
+	if strings.Contains("filepath", "config.ini") {
+		content, _ := io.ReadAll(resp.Body)
+		newContent := bytes.ReplaceAll(content, []byte("//gameres.chronodivide.com"), []byte("."))
+		_, err = f.Write(newContent)
+
+	} else {
+		_, err = io.Copy(f, resp.Body)
+	}
+
 	return
 }
 
