@@ -38,6 +38,7 @@ jobs:
         ls -R -l
         git config --local user.email "webra2@webra2.com"
         git config --local user.name "webra2"
+        echo 'version' >> readme.md
         git commit -a -m "Add changes"
         git push origin main
     - name: download
