@@ -26,8 +26,18 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+    - uses: actions/checkout@v4
+      with:
+        repository: 'https://github.com/webra2/webra2.github.io'
+        path: website
     - name: download
       run: ./main -u https://game.chronodivide.com
-    - name: list
-      run:  ls website -R -l
+    - name: push
+      run: |
+        cd webiste
+        ls website -R -l
+        git config --local user.email "webra2@webra2.com"
+        git config --local user.name "webra2"
+        git commit -a -m "Add changes"
+        git push origin main
     
