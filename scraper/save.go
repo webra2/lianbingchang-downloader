@@ -2,6 +2,7 @@ package scraper
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -14,6 +15,7 @@ import (
 // Download a single link
 func (s *Scraper) SaveAttachment(url string) (err error) {
 	filepath := s.GetPath(url)
+	fmt.Println("save:", url, filepath)
 	if filepath == "" {
 		return
 	}
@@ -51,7 +53,7 @@ func (s *Scraper) SaveAttachment(url string) (err error) {
 
 // Download a single link
 func (s *Scraper) SaveHTML(url string, html string) (err error) {
-	filepath := s.GetPath(url)
+	filepath := ""
 	if filepath == "" {
 		filepath = "/index.html"
 	}
