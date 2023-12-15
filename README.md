@@ -6,9 +6,12 @@ In most cases, you only need to access https://game.chronodivide.com/ to play.
 If you enjoy the game and would like to offer your support, please consider making a donation :https://chronodivide.com/#donate
 
 
+
 # Chronodivide Downloader
+
  An automatic download tool that relies on web-downloader and GitHub actions to download chronodivide , including CSS, JSS, and other assets. 
 Coded with Go.
+一个自动下载网页版红警的工具，可以自动下载网页红警并部署到github pages.
 
 ## Project status
 There are still some to-do's, and some refactoring is needed, but the app is already functional. 
