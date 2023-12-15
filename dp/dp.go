@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func RecordNetwork() []string {
+func RecordNetwork(cdUrl string) []string {
 	dir := os.TempDir()
 	urls := make([]string, 0)
 
@@ -46,7 +46,7 @@ func RecordNetwork() []string {
 
 	err := chromedp.Run(taskCtx,
 		network.Enable(),
-		chromedp.Navigate(`https://game.chronodivide.com/`),
+		chromedp.Navigate(cdUrl),
 		chromedp.WaitVisible(`.message-box-content`, chromedp.ByQuery),
 		chromedp.Sleep(time.Second),
 		chromedp.Evaluate("document.querySelector('.close-button').click()", nil),
