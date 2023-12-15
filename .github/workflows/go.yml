@@ -26,18 +26,20 @@ jobs:
 
     - name: Test
       run: go test -v ./...
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
       with:
-        repository: 'https://github.com/webra2/webra2.github.io'
+        repository: 'webra2/webra2.github.io'
         path: website
-    - name: download
-      run: ./main -u https://game.chronodivide.com
     - name: push
       run: |
         cd webiste
+        touch readme.md
         ls website -R -l
         git config --local user.email "webra2@webra2.com"
         git config --local user.name "webra2"
         git commit -a -m "Add changes"
         git push origin main
+    - name: download
+      run: ./main
+
     
