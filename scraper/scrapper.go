@@ -119,7 +119,7 @@ func (s *Scraper) getLinks(domain string) (page Page, attachments []string, vers
 					link, err := resp.Request.URL.Parse(a.Val)
 					if err == nil {
 						if strings.Contains(link.String(), "dist") {
-							version = s.getVersion(link.String())
+							version = s.GetVersion(link.String())
 						}
 						foundLink := s.sanitizeURL(link.String())
 						if s.isValidAttachment(foundLink) {
