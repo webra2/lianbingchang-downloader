@@ -15,6 +15,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"github.com/antsanchez/go-download-web/dp"
 	"log"
 	"net/http"
@@ -26,8 +27,11 @@ import (
 	"github.com/antsanchez/go-download-web/sitemap"
 )
 
+const CDUrl = "https://game.chronodivide.com/"
+
+var CDResUrl = "https://gameres.chronodivide.com/"
+
 type Flags struct {
-	// Domain to be scraped
 	Domain *string
 
 	// New Domain to be set
@@ -44,7 +48,7 @@ type Flags struct {
 }
 
 func parseFlags() (flags Flags, err error) {
-	flags.Domain = flag.String("u", "", "URL to copy")
+	flags.Domain = flag.String("u", "", "chronodivide source site URL")
 	flags.NewDomain = flag.String("new", "", "New URL")
 	flags.Simultaneus = flag.Int("s", 3, "Number of concurrent connections")
 	flags.UseQueries = flag.Bool("q", false, "Ignore queries on URLs")
@@ -52,8 +56,7 @@ func parseFlags() (flags Flags, err error) {
 	flag.Parse()
 
 	if *flags.Domain == "" {
-		err = errors.New("URL cannot be empty! Please, use '-u <URL>'")
-		return
+		*flags.Domain = CDUrl
 	}
 
 	if *flags.Simultaneus <= 0 {
@@ -73,12 +76,11 @@ func parseFlags() (flags Flags, err error) {
 
 func main() {
 
-	scanUrls := dp.RecordNetwork()
-
 	flags, err := parseFlags()
 	if err != nil {
 		log.Fatal(err)
 	}
+	scanUrls := dp.RecordNetwork(*flags.Domain)
 
 	// Create directory for downloaded website
 	err = os.MkdirAll(*flags.Path, 0755)
@@ -179,10 +181,33 @@ func main() {
 
 	log.Println("\nFinished scraping the site, version :", version)
 
-	files = append(files, scanUrls...)
+	for _, scanUrl := range scanUrls {
+		files = append(files, s.RemoveQuery(scanUrl))
+	}
+	// other files
+	files = append(files, fmt.Sprintf("%s/servers.ini", *flags.Domain))
+
 	log.Println("\nDownloading attachments...", len(files))
 	for _, attachedFile := range files {
+		if !strings.Contains(attachedFile, *flags.Domain) && !strings.Contains(attachedFile, CDResUrl) {
+			continue
+		}
 		s.SaveAttachment(attachedFile)
+		if strings.Contains(attachedFile, "manifest.json") {
+			moreAttachments := s.GetManifest(attachedFile)
+			for _, link := range moreAttachments {
+				if !s.IsURLInSlice(link, files) {
+					log.Println("Appended Manifest: ", link)
+					files = append(files, link)
+					go func() {
+						err := s.SaveAttachment(link)
+						if err != nil {
+							log.Println(err)
+						}
+					}()
+				}
+			}
+		}
 		if strings.Contains(attachedFile, ".css") {
 			moreAttachments := s.GetInsideAttachments(attachedFile)
 			for _, link := range moreAttachments {
