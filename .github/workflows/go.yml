@@ -35,8 +35,7 @@ jobs:
     - name: push
       run: |
         cd website
-        touch readme.md
-        ls website -R -l
+        ls -R -l
         git config --local user.email "webra2@webra2.com"
         git config --local user.name "webra2"
         git commit -a -m "Add changes"
