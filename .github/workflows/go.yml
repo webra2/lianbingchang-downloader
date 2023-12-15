@@ -40,7 +40,8 @@ jobs:
         git config --local user.name "webra2"
         echo 'version' >> readme.md
         git commit -a -m "Add changes"
-        git push origin main
+    - name: Push changes
+      uses: ad-m/github-push-action@master
     - name: download
       run: ./main
 
