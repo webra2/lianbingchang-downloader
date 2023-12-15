@@ -34,7 +34,7 @@ jobs:
         path: website
     - name: push
       run: |
-        cd webiste
+        cd website
         touch readme.md
         ls website -R -l
         git config --local user.email "webra2@webra2.com"
