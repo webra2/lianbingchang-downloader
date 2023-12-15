@@ -2,6 +2,9 @@ package scraper
 
 import (
 	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -24,8 +27,8 @@ func (s *Scraper) isInternLink(link string) bool {
 	return strings.Index(link, s.Root) == 0
 }
 
-// removeQuery removes the query parameters from the given link
-func (s *Scraper) removeQuery(link string) string {
+// RemoveQuery removes the query parameters from the given link
+func (s *Scraper) RemoveQuery(link string) string {
 	return strings.Split(link, "?")[0]
 }
 
@@ -34,7 +37,7 @@ func (s *Scraper) isStart(link string) bool {
 	return strings.Compare(link, s.Root) == 0
 }
 
-func (s *Scraper) getVersion(link string) string {
+func (s *Scraper) GetVersion(link string) string {
 	u, _ := url.Parse(link)
 	if u == nil {
 		return ""
@@ -59,7 +62,7 @@ func (s *Scraper) sanitizeURL(link string) string {
 	tram := strings.Split(link, "#")[0]
 
 	if !s.UseQueries {
-		tram = s.removeQuery(tram)
+		tram = s.RemoveQuery(tram)
 	}
 
 	return tram
@@ -172,6 +175,53 @@ func (s *Scraper) getURLEmbeeded(body string) (url string) {
 	return url
 }
 
+//
+
+type ChecksumData struct {
+	Version   int               `json:"version"`
+	Format    string            `json:"format"`
+	Checksums map[string]uint32 `json:"checksums"`
+}
+
+func (s *Scraper) parseChecksumFile(domain string, reader io.Reader) ([]string, error) {
+	// 读取文件内容
+	fileContent, err := io.ReadAll(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	// 解析 JSON 数据
+	var checksumData ChecksumData
+	err = json.Unmarshal(fileContent, &checksumData)
+	if err != nil {
+		return nil, err
+	}
+
+	// 提取文件列表
+	var fileList []string
+	for fileName := range checksumData.Checksums {
+		fileList = append(fileList, fmt.Sprintf("%s/v%d/%s", domain, checksumData.Version, fileName))
+	}
+
+	return fileList, nil
+}
+
+func (s *Scraper) GetManifest(url string) (res []string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+
+	fileUrls, err := s.parseChecksumFile(s.GetDomain(url), resp.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println("mainfest files:", fileUrls)
+	return fileUrls
+}
+
 // GetInsideAttachments gets inside CSS Files
 func (s *Scraper) GetInsideAttachments(url string) (attachments []string) {
 	if commons.IsFinal(url) {
@@ -230,8 +280,40 @@ func (s *Scraper) getOnlyPath(url string) (path string) {
 
 // GetPath returns only the path, without domain, from the given link
 func (s *Scraper) GetPath(link string) string {
-	ret := strings.Replace(link, s.Root, "", 1)
-	return strings.Replace(ret, "https://gameres.chronodivide.com", "", 1)
+	re := regexp.MustCompile(`^(https?://)?([^/]+)?(.*)$`)
+	matches := re.FindStringSubmatch(link)
+
+	// 没有路径
+	if len(matches) == 3 {
+		return ""
+	}
+
+	if len(matches) != 4 {
+		return ""
+	}
+
+	// 获取路径
+	path := matches[3]
+	if path == "" {
+		return "/" // 如果路径为空，则默认为根路径
+	}
+
+	return path
+}
+func (s *Scraper) GetDomain(link string) string {
+	re := regexp.MustCompile(`^(https?://)?([^/]+)?(.*)$`)
+	matches := re.FindStringSubmatch(link)
+
+	if len(matches) != 4 {
+		return ""
+	}
+
+	// 获取路径
+	domain := matches[1] + matches[2]
+	if domain == "" {
+		return "" // 如果路径为空，则默认为根路径
+	}
+	return domain
 }
 
 // exists returns whether the given file or directory exists
