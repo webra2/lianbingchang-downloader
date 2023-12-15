@@ -10,8 +10,8 @@ If you enjoy the game and would like to offer your support, please consider maki
 # Chronodivide Downloader
 
  An automatic download tool that relies on web-downloader and GitHub actions to download chronodivide , including CSS, JSS, and other assets. 
-Coded with Go.
-一个自动下载网页版红警的工具，可以自动下载网页红警并部署到github pages.
+Coded with Go, and deploy it to github pages: https://webra2.github.io
+一个自动下载网页版红警的工具，可以自动下载网页红警并部署到github pages,试玩： https://webra2.github.io 
 
 ## Project status
 There are still some to-do's, and some refactoring is needed, but the app is already functional. 
