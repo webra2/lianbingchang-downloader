@@ -28,7 +28,7 @@ jobs:
       run: go test -v ./...
     - name: mkwebsitedir
       run: mkdir website
-    - uses: actions/checkout@v4.1.1
+    - uses: actions/checkout@v3
       with:
         repository: 'webra2/webra2.github.io'
         path: website
