@@ -32,7 +32,7 @@ jobs:
       with:
         repository: 'webra2/webra2.github.io'
         path: website
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
     - name: push
       run: |
         cd website
