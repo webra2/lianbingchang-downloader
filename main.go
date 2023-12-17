@@ -186,10 +186,15 @@ func main() {
 	}
 	// other files
 	files = append(files, fmt.Sprintf("%s/servers.ini", *flags.Domain))
+	files = append(files, fmt.Sprintf("%s/res/locale/zh-CN.json", *flags.Domain))
 
 	log.Println("\nDownloading attachments...", len(files))
 	for _, attachedFile := range files {
 		if !strings.Contains(attachedFile, *flags.Domain) && !strings.Contains(attachedFile, CDResUrl) {
+			continue
+		}
+		// skip mix files
+		if (strings.Contains(attachedFile,".mix") {
 			continue
 		}
 		s.SaveAttachment(attachedFile)
