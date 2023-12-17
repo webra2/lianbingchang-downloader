@@ -185,7 +185,9 @@ func main() {
 		files = append(files, s.RemoveQuery(scanUrl))
 	}
 	// other files
-	otherFiles := []string{"/dist/ffmpeg.min.js","/dist/ffmped-core.js","/dist/ffmpeg-core.wasm","/servers.ini","/res/locale/zh-CN.json"}
+	otherFiles := []string{
+		"/lib/ffmpeg-core.js","/lib/ffmpeg-core.wasm","/lib/ffmpeg-core.worker.js",
+		"/dist/ffmpeg.min.js","/dist/ffmped-core.js","/dist/ffmpeg-core.wasm","/servers.ini","/res/locale/zh-CN.json"}
 	for _,ofile := range otherFiles {
 		files = append(files, fmt.Sprintf("%s/%s", *flags.Domain,ofile))
 	}
