@@ -194,7 +194,7 @@ func main() {
 			continue
 		}
 		// skip mix files
-		if (strings.Contains(attachedFile,".mix") {
+		if strings.Contains(attachedFile,".mix") {
 			continue
 		}
 		s.SaveAttachment(attachedFile)
