@@ -36,7 +36,7 @@ jobs:
         path: website
         token: ${{ secrets.API_TOKEN_GITHUB }}
     - name: download-cd
-      run: ./chronodivide-downloader
+      run: ./go-download-web
     - name: push
       run: |
         cd website
