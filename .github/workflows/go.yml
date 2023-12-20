@@ -24,7 +24,7 @@ jobs:
         go-version: '1.20'
 
     - name: Build
-      run: go build -v ./ -o main
+      run: go build -v ./
 
     - name: Test
       run: go test -v ./...
@@ -36,7 +36,7 @@ jobs:
         path: website
         token: ${{ secrets.API_TOKEN_GITHUB }}
     - name: download-cd
-      run: ./main
+      run: ./chronodivide-downloader
     - name: push
       run: |
         cd website
