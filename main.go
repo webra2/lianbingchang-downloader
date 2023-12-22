@@ -81,14 +81,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = updateServiceINI(*flags.Domain, *flags.Path)
-	if err != nil {
-		log.Println(err)
-	}
-	err = checkVersion(*flags.Domain, *flags.Path)
-	if err != nil {
-		log.Println(err)
-	}
+	// err = updateServiceINI(*flags.Domain, *flags.Path)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
+	// err = checkVersion(*flags.Domain, *flags.Path)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 	scanUrls := dp.RecordNetwork(*flags.Domain)
 
 	// Create directory for downloaded website
