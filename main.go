@@ -29,7 +29,7 @@ import (
 
 const CDUrl = "https://game.bun.sh.cn/"
 
-var CDResUrl = "https://game.bun.sh.cn/"
+var CDResUrl = "https://res.wangyehongjing.com/v2/"
 
 type Flags struct {
 	Domain *string
