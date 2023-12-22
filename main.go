@@ -27,9 +27,9 @@ import (
 	"github.com/antsanchez/go-download-web/sitemap"
 )
 
-const CDUrl = "https://game.chronodivide.com/"
+const CDUrl = "https://game.bun.sh.cn/"
 
-var CDResUrl = "https://gameres.chronodivide.com/"
+var CDResUrl = "https://game.bun.sh.cn/"
 
 type Flags struct {
 	Domain *string
