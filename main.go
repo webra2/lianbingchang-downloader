@@ -231,12 +231,12 @@ func main() {
 				if !s.IsURLInSlice(link, files) {
 					log.Println("Appended: ", link)
 					files = append(files, link)
-					go func() {
+					// go func() {
 						err := s.SaveAttachment(link)
 						if err != nil {
 							log.Println(err)
 						}
-					}()
+					// }()
 				}
 			}
 		}
