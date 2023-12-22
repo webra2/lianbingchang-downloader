@@ -208,9 +208,7 @@ func main() {
 			continue
 		}
 		// skip mix files
-		if strings.Contains(attachedFile,".mix") || strings.Contains(attachedFile,".ini") {
-			continue
-		}
+		
 		s.SaveAttachment(attachedFile)
 		if strings.Contains(attachedFile, "manifest.json") {
 			moreAttachments := s.GetManifest(attachedFile)
